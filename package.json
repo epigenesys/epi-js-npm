@@ -1,0 +1,27 @@
+{
+  "name": "epi-js",
+  "version": "0.0.1",
+  "description": "NPM port of EpiJS",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epigenesys/epi-js-npm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epigenesys/epi-js-npm/issues"
+  },
+  "homepage": "https://github.com/epigenesys/epi-js-npm#readme",
+  "dependencies": {
+    "babel-plugin-transform-es2015-modules-simple-commonjs": "^0.3.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
