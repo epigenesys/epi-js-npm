@@ -17,7 +17,7 @@ Run the following line in your projects root folder
 ### AJAX Modal
 Add to your `app/javascript/packs/application.js`
 
-    import { AjaxModal }
+    import { AjaxModal } from 'epigenesys-js'
 
 #### Via data attribute
 Add `data-toggle=ajax-modal` to your link
@@ -30,7 +30,7 @@ Add `ajax-modal` class to your link
 ### Flash Message
 Add to your `app/javascript/packs/application.js`
 
-    import { FlashMessage }
+    import { FlashMessage } from 'epigenesys-js'
 
 #### For Rails flash fessage
 Wrap your flash message in a div with `.flash_messages` class, e.g.
@@ -56,7 +56,7 @@ You can change the markup of the dismiss link by setting the following variable:
 ### Option Filter
 Add to your `app/javascript/packs/application.js`
 
-    import { OptionFilter }
+    import { OptionFilter } from 'epigenesys-js'
 
 #### Via data attributes
 Add the jQuery selector of the target input as `data-option-filter-target` to the source input, e.g.
@@ -75,7 +75,7 @@ You can also add `data-option-filter-disable-empty` to the source input, so that
 
 Add to your `app/javascript/packs/application.js`
 
-    import { ResponsiveTable }
+    import { ResponsiveTable } from 'epigenesys-js'
 
 And to your `app/javascript/packs/styles.css`
 
@@ -87,7 +87,7 @@ You can override the label for each table cell by adding `data-label` to the `td
 ### Visibility Map
 Add to your `app/javascript/packs/application.js`
 
-    import { VisibilityMap }
+    import { VisibilityMap } from 'epigenesys-js'
 
 #### Via data attributes
 Set `data-visibility-map` of a select box, radio button group or check boxes to a JSON string, e.g.
@@ -121,7 +121,7 @@ This allows you to filter out rows in a table based on an input field.
 
 Add to your `app/javascript/packs/application.js`
 
-    import { TableFilter }
+    import { TableFilter } from 'epigenesys-js'
 
 #### Via data attributes
 Set `data-table-filter-target` on the input field you wish to filter by. This should be a selecter for the `table` tag you want to filter. This needs to have a `thead` and `tbody`.
