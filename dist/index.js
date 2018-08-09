@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ajax_modal = require('./dist/ajax_modal');
+var _ajax_modal = require('./ajax_modal');
 
 Object.defineProperty(exports, 'AjaxModal', {
   enumerable: true,
@@ -13,7 +13,7 @@ Object.defineProperty(exports, 'AjaxModal', {
   }
 });
 
-var _flash_message = require('./dist/flash_message');
+var _flash_message = require('./flash_message');
 
 Object.defineProperty(exports, 'FlashMessage', {
   enumerable: true,
@@ -22,7 +22,7 @@ Object.defineProperty(exports, 'FlashMessage', {
   }
 });
 
-var _option_filter = require('./dist/option_filter');
+var _option_filter = require('./option_filter');
 
 Object.defineProperty(exports, 'OptionFilter', {
   enumerable: true,
@@ -31,7 +31,7 @@ Object.defineProperty(exports, 'OptionFilter', {
   }
 });
 
-var _responsive_table = require('./dist/responsive_table');
+var _responsive_table = require('./responsive_table');
 
 Object.defineProperty(exports, 'ResponsiveTable', {
   enumerable: true,
@@ -40,7 +40,7 @@ Object.defineProperty(exports, 'ResponsiveTable', {
   }
 });
 
-var _table_filter = require('./dist/table_filter');
+var _table_filter = require('./table_filter');
 
 Object.defineProperty(exports, 'TableFilter', {
   enumerable: true,
@@ -49,7 +49,7 @@ Object.defineProperty(exports, 'TableFilter', {
   }
 });
 
-var _visibility_map = require('./dist/visibility_map');
+var _visibility_map = require('./visibility_map');
 
 Object.defineProperty(exports, 'VisibilityMap', {
   enumerable: true,
