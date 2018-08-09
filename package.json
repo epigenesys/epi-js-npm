@@ -1,6 +1,6 @@
 {
   "name": "epigenesys-js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "EpiJS on ES6",
   "main": "./dist/index.js",
   "scripts": {
