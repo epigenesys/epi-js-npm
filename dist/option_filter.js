@@ -1,11 +1,13 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports.default = function ($) {
+var _default = function ($) {
   var OptionFilter;
+
   OptionFilter = function () {
     function OptionFilter(element) {
       this.element = element;
@@ -26,9 +28,11 @@ exports.default = function ($) {
         var $selected, $toShow;
         $selected = $(':selected', $(this));
         $toShow = $(this).data('option-filter-all-options').filter("[data-option-filter-value='" + valueSelected + "'], :not([data-option-filter-value])");
+
         if (!($toShow.filter($selected).length > 0)) {
           $(this).val('');
         }
+
         $(this).html($toShow).trigger('change.option-filter');
         return $(this).prop('disabled', disableEmpty && $toShow.length === 0);
       });
@@ -36,16 +40,20 @@ exports.default = function ($) {
 
     return OptionFilter;
   }();
+
   $.fn.optionFilter = function () {
     return this.each(function () {
       var data;
       data = $(this).data('option-filter');
+
       if (data == null) {
         $(this).data('option-filter', data = new OptionFilter($(this)));
       }
+
       return data.filter();
     });
   };
+
   return $(function () {
     $('[data-option-filter-target]').optionFilter();
     return $(document.body).on('change', '[data-option-filter-target]', function (e) {
@@ -53,3 +61,5 @@ exports.default = function ($) {
     });
   });
 }(jQuery);
+
+exports["default"] = _default;

@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports.default = function ($) {
+var _default = function ($) {
   $(document).on('set-label', 'table.table-responsive-xs, .table-responsive-sm', function () {
     return $('thead th', $(this)).each(function (index) {
       var label;
@@ -16,3 +17,5 @@ exports.default = function ($) {
     return $(this).trigger('set-label');
   });
 }(jQuery);
+
+exports["default"] = _default;

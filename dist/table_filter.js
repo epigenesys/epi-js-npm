@@ -1,11 +1,13 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports.default = function ($) {
+var _default = function ($) {
   var TableFilter;
+
   TableFilter = function () {
     function TableFilter(element) {
       var colspan, message;
@@ -28,6 +30,7 @@ exports.default = function ($) {
       });
       $toShow.show();
       this.allRows.not($toShow).hide();
+
       if ($toShow.length === 0) {
         return $('tbody', this.target).append(this.noRecordRow);
       }
@@ -35,19 +38,25 @@ exports.default = function ($) {
 
     return TableFilter;
   }();
+
   $.fn.tableFilter = function () {
     return this.each(function () {
       var data;
       data = $(this).data('table-filter');
+
       if (data == null) {
         $(this).data('table-filter', data = new TableFilter($(this)));
       }
+
       return data.filter();
     });
   };
+
   return $(function () {
     return $(document).on('keyup', '[data-table-filter-target]', function (e) {
       return $(this).tableFilter();
     });
   });
 }(jQuery);
+
+exports["default"] = _default;

@@ -1,21 +1,31 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
+
 var extend = function extend(child, parent) {
   for (var key in parent) {
     if (hasProp.call(parent, key)) child[key] = parent[key];
-  }function ctor() {
+  }
+
+  function ctor() {
     this.constructor = child;
-  }ctor.prototype = parent.prototype;child.prototype = new ctor();child.__super__ = parent.prototype;return child;
+  }
+
+  ctor.prototype = parent.prototype;
+  child.prototype = new ctor();
+  child.__super__ = parent.prototype;
+  return child;
 },
     hasProp = {}.hasOwnProperty;
 
-exports.default = function ($) {
+var _default = function ($) {
   'use strict';
 
   var CheckboxVisibilityChecker, GenericVisibilityChecker;
+
   GenericVisibilityChecker = function () {
     function GenericVisibilityChecker(element) {
       var ref, ref1;
@@ -37,6 +47,7 @@ exports.default = function ($) {
           return $(_this.map[value], _this.scope).get();
         };
       }(this))));
+
       if (this.action === 'show') {
         toShow = fieldsForValue;
         toHide = this.allFields.not(fieldsForValue);
@@ -44,6 +55,7 @@ exports.default = function ($) {
         toHide = fieldsForValue;
         toShow = this.allFields.not(fieldsForValue);
       }
+
       toShow.show();
       toShow.trigger('visibility.show');
       toHide.hide();
@@ -66,6 +78,7 @@ exports.default = function ($) {
 
     return GenericVisibilityChecker;
   }();
+
   CheckboxVisibilityChecker = function (superClass) {
     extend(CheckboxVisibilityChecker, superClass);
 
@@ -81,20 +94,25 @@ exports.default = function ($) {
 
     return CheckboxVisibilityChecker;
   }(GenericVisibilityChecker);
+
   $.fn.setVisibility = function (action) {
     return this.each(function () {
       var checkerClass, data;
       data = $(this).data('visibility-checker');
+
       if (data == null) {
         checkerClass = $(this).is("input[type='checkbox']") ? CheckboxVisibilityChecker : GenericVisibilityChecker;
         $(this).data('visibility-checker', data = new checkerClass($(this)));
       }
+
       if (action == null) {
         action = 'check';
       }
+
       return data[action]();
     });
   };
+
   return $(function () {
     $('input[data-visibility-map]:checked, select[data-visibility-map]').setVisibility();
     $(document.body).on('visibility.show', function (e) {
@@ -107,3 +125,5 @@ exports.default = function ($) {
     });
   });
 }(jQuery);
+
+exports["default"] = _default;

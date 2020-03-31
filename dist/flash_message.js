@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports.default = function ($) {
+var _default = function ($) {
   var $alerts = [];
   var alertTimeout = [];
 
@@ -12,6 +13,7 @@ exports.default = function ($) {
     if (timeout == null) {
       timeout = 6000;
     }
+
     if (dismissLink == null) {
       dismissLink = $.flashAlert.defaults.dismissLink;
     }
@@ -23,16 +25,17 @@ exports.default = function ($) {
     }
 
     $('.flash-messages').prepend($alert);
-
     $alerts.push($alert);
     alertTimeout.push(setTimeout(function () {
       return $alerts.shift().alert('close');
     }, timeout));
-
     return true;
   };
+
   $.flashAlert.defaults = {
     dismissLink: '<button type="button" class="close" data-dismiss="alert" aria-label="Dismiss"><span aria-hidden="true">&times;</span></button>',
     affix: false
   };
 }(jQuery);
+
+exports["default"] = _default;

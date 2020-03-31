@@ -1,61 +1,55 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _ajax_modal = require('./ajax_modal');
-
-Object.defineProperty(exports, 'AjaxModal', {
+Object.defineProperty(exports, "AjaxModal", {
   enumerable: true,
   get: function get() {
-    return _interopRequireDefault(_ajax_modal).default;
+    return _ajax_modal["default"];
+  }
+});
+Object.defineProperty(exports, "FlashMessage", {
+  enumerable: true,
+  get: function get() {
+    return _flash_message["default"];
+  }
+});
+Object.defineProperty(exports, "OptionFilter", {
+  enumerable: true,
+  get: function get() {
+    return _option_filter["default"];
+  }
+});
+Object.defineProperty(exports, "ResponsiveTable", {
+  enumerable: true,
+  get: function get() {
+    return _responsive_table["default"];
+  }
+});
+Object.defineProperty(exports, "TableFilter", {
+  enumerable: true,
+  get: function get() {
+    return _table_filter["default"];
+  }
+});
+Object.defineProperty(exports, "VisibilityMap", {
+  enumerable: true,
+  get: function get() {
+    return _visibility_map["default"];
   }
 });
 
-var _flash_message = require('./flash_message');
+var _ajax_modal = _interopRequireDefault(require("./ajax_modal"));
 
-Object.defineProperty(exports, 'FlashMessage', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_flash_message).default;
-  }
-});
+var _flash_message = _interopRequireDefault(require("./flash_message"));
 
-var _option_filter = require('./option_filter');
+var _option_filter = _interopRequireDefault(require("./option_filter"));
 
-Object.defineProperty(exports, 'OptionFilter', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_option_filter).default;
-  }
-});
+var _responsive_table = _interopRequireDefault(require("./responsive_table"));
 
-var _responsive_table = require('./responsive_table');
+var _table_filter = _interopRequireDefault(require("./table_filter"));
 
-Object.defineProperty(exports, 'ResponsiveTable', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_responsive_table).default;
-  }
-});
+var _visibility_map = _interopRequireDefault(require("./visibility_map"));
 
-var _table_filter = require('./table_filter');
-
-Object.defineProperty(exports, 'TableFilter', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_table_filter).default;
-  }
-});
-
-var _visibility_map = require('./visibility_map');
-
-Object.defineProperty(exports, 'VisibilityMap', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_visibility_map).default;
-  }
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }

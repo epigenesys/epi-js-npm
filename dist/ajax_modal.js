@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports.default = function ($) {
+var _default = function ($) {
   $.ajaxModal = function (url, params) {
     return $.get(url, params, function (data) {
       var $modal, alreadyShown;
@@ -16,9 +17,11 @@ exports.default = function ($) {
       $('.modal-dialog', $modal).attr('role', 'document');
       $('body').append($modal.modal());
       $(document).trigger('ajax-modal-show');
+
       if (alreadyShown) {
         $(document).trigger('ajax-modal-shown');
       }
+
       return $modal.on('hidden.bs.modal hidden', function (e) {
         if (e.target === this) {
           return $(this).remove();
@@ -29,6 +32,7 @@ exports.default = function ($) {
       });
     });
   };
+
   return $(function () {
     return $(document.body).on('click', 'a.ajax-modal, a[data-toggle="ajax-modal"]', function (e) {
       e.preventDefault();
@@ -36,3 +40,5 @@ exports.default = function ($) {
     });
   });
 }(jQuery);
+
+exports["default"] = _default;
