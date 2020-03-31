@@ -27,7 +27,9 @@ var _default = function ($) {
           return $(this).remove();
         }
       }).on('shown.bs.modal shown', function (e) {
-        setTimeout("$('#modalWindow [autofocus]').first().focus()", 0);
+        setTimeout(function () {
+          $('#modalWindow [autofocus]').first().focus();
+        }, 0);
         return $(document).trigger('ajax-modal-shown');
       });
     });
