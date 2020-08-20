@@ -18,7 +18,7 @@ var _default = function ($) {
       dismissLink = $.flashAlert.defaults.dismissLink;
     }
 
-    var $alert = $('<div>').addClass("alert alert-dismissible fade show in " + type).append(message).append(dismissLink);
+    var $alert = $('<div>').addClass("alert alert-dismissible fade in show " + type).append(message).append(dismissLink);
 
     if (type == 'alert-success') {
       $('.flash-messages .alert').alert('close');
