@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.9.0"
   },
   "resolutions": {
-    "glob-parent": "^5.1.2"
+    "glob-parent": "^5.1.2",
+    "kind-of": "^6.0.3"
   }
 }
