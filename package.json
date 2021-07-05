@@ -1,6 +1,6 @@
 {
   "name": "@epigenesys/epi-js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "EpiJS on ES6",
   "main": "./dist/index.js",
   "scripts": {
@@ -25,5 +25,8 @@
     "@babel/core": "^7.9.0",
     "@babel/plugin-transform-modules-commonjs": "^7.9.0",
     "@babel/preset-env": "^7.9.0"
+  },
+  "resolutions": {
+    "glob-parent": "^5.1.2"
   }
 }
