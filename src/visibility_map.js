@@ -1,99 +1,73 @@
-var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  hasProp = {}.hasOwnProperty;
+export default class VisibilityMap {
+  constructor(element) {
+    this.element = element;
+    this.scope = element.dataset.visibilityMapScope || document;
+    this.action = element.dataset.visibilityMapAction || 'show';
+    this.map = JSON.parse(element.dataset.visibilityMap);
 
-export default (function($) {
-  'use strict';
-  var CheckboxVisibilityChecker, GenericVisibilityChecker;
-  GenericVisibilityChecker = (function() {
-    function GenericVisibilityChecker(element) {
-      var ref, ref1;
-      this.element = element;
-      this.scope = this.element.closest((ref = this.element.data('visibility-map-scope')) != null ? ref : document);
-      this.action = (ref1 = this.element.data('visibility-map-action')) != null ? ref1 : 'show';
-      this.map = this.element.data('visibility-map');
-      this.allFields = $($.unique($.map(this.map, (function(_this) {
-        return function(val) {
-          return $(val, _this.scope).get();
-        };
-      })(this))));
+    this.allFields = Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat()
+  }
+
+  static start() {
+    this.instances = new Map();
+
+    const initAndStore = (element) => {
+      this.instances.set(element, this.instances.get(element) || new VisibilityMap(element));
+      this.instances.get(element).updateVisibility();
     }
 
-    GenericVisibilityChecker.prototype.check = function() {
-      var fieldsForValue, toHide, toShow;
-      fieldsForValue = $($.unique($.map(this.getValue(), (function(_this) {
-        return function(value) {
-          return $(_this.map[value], _this.scope).get();
-        };
-      })(this))));
-      if (this.action === 'show') {
-        toShow = fieldsForValue;
-        toHide = this.allFields.not(fieldsForValue);
-      } else {
-        toHide = fieldsForValue;
-        toShow = this.allFields.not(fieldsForValue);
+    document.addEventListener('change', (event) => {
+      const { target } = event;
+
+      if (target && target.hasAttribute('data-visibility-map')) {
+        initAndStore(target);
       }
-      toShow.show();
-      toShow.trigger('visibility.show');
-      toHide.hide();
-      return toHide.trigger('visibility.hide');
-    };
+    });
 
-    GenericVisibilityChecker.prototype.hideAll = function() {
-      this.allFields.hide();
-      return this.allFields.trigger('visibility.hide');
-    };
-
-    GenericVisibilityChecker.prototype.showAll = function() {
-      this.allFields.show();
-      return this.allFields.trigger('visibility.show');
-    };
-
-    GenericVisibilityChecker.prototype.getValue = function() {
-      return $.makeArray(this.element.val());
-    };
-
-    return GenericVisibilityChecker;
-
-  })();
-  CheckboxVisibilityChecker = (function(superClass) {
-    extend(CheckboxVisibilityChecker, superClass);
-
-    function CheckboxVisibilityChecker() {
-      return CheckboxVisibilityChecker.__super__.constructor.apply(this, arguments);
-    }
-
-    CheckboxVisibilityChecker.prototype.getValue = function() {
-      return $.map($("input[type='checkbox'][name='" + (this.element.attr('name')) + "']:checked"), function(inputElement) {
-        return $(inputElement).val();
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-visibility-map]:checked, select[data-visibility-map]').forEach((element) => {
+        initAndStore(element);
       });
-    };
+    });
+  }
 
-    return CheckboxVisibilityChecker;
+  updateVisibility() {
+    const { action, getInputsForValues } = this;
 
-  })(GenericVisibilityChecker);
-  $.fn.setVisibility = function(action) {
-    return this.each(function() {
-      var checkerClass, data;
-      data = $(this).data('visibility-checker');
-      if (data == null) {
-        checkerClass = $(this).is("input[type='checkbox']") ? CheckboxVisibilityChecker : GenericVisibilityChecker;
-        $(this).data('visibility-checker', data = new checkerClass($(this)));
+    let toShow, toHide;
+
+    if (action === 'show') {
+      [toShow, toHide] = getInputsForValues();
+    } else {
+      [toHide, toShow] = getInputsForValues();
+    }
+
+    toShow.forEach((element) => {
+      if (element.classList.contains('d-none')) {
+        element.classList.remove('d-none');
+        element.dispatchEvent(new Event('visibility:show'));
       }
-      if (action == null) {
-        action = 'check';
+    });
+
+    toHide.forEach((element) => {
+      if (!element.classList.contains('d-none')) {
+        element.classList.add('d-none');
+        element.dispatchEvent(new Event('visibility:hide'));
       }
-      return data[action]();
-    });
-  };
-  return $(function() {
-    $('input[data-visibility-map]:checked, select[data-visibility-map]').setVisibility();
-    $(document.body).on('visibility.show', function(e) {
-      return $(':input:not([data-visibility-map-no-auto-enable])', $(e.target)).prop('disabled', false);
-    }).on('visibility.hide', function(e) {
-      return $(':input', $(e.target)).prop('disabled', true);
-    });
-    return $(document.body).on('change', '[data-visibility-map]', function(e) {
-      return $(this).setVisibility();
-    });
-  });
-})(jQuery);
+    })
+  }
+
+  getInputsForValues = () => {
+    const { selectedValues, scope, map, allFields } = this;
+    const inputsForValue = selectedValues.map((selectedValue) => [...scope.querySelectorAll(map[selectedValue])]).flat()
+    const otherInputs = allFields.filter(element => inputsForValue.indexOf(element) < 0)
+
+    return [inputsForValue, otherInputs];
+  }
+
+  get selectedValues() {
+    return Array.from(document.querySelectorAll(`input[name="${this.element.getAttribute('name')}"]`)).
+      filter((input) => input.selected || input.checked).
+      map((input) => input.value);
+  }
+}
