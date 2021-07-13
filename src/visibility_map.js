@@ -5,15 +5,15 @@ export default class VisibilityMap {
     this.action = element.dataset.visibilityMapAction || 'show';
     this.map = JSON.parse(element.dataset.visibilityMap);
 
-    this.allFields = Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat()
+    this.allFields = [...new Set(Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat())];
   }
 
-  static start() {
-    this.instances = new Map();
+  static #instances = new Map();
 
+  static start() {
     const initAndStore = (element) => {
-      this.instances.set(element, this.instances.get(element) || new VisibilityMap(element));
-      this.instances.get(element).updateVisibility();
+      this.#instances.set(element, this.#instances.get(element) || new this(element));
+      this.#instances.get(element).updateVisibility();
     }
 
     document.addEventListener('change', (event) => {
@@ -24,6 +24,14 @@ export default class VisibilityMap {
       }
     });
 
+    document.addEventListener('visibility.hide', (event) => {
+      event.target.querySelectorAll('input, select, textarea').forEach((element) => element.disabled = true);
+    })
+
+    document.addEventListener('visibility.show', (event) => {
+      event.target.querySelectorAll('input, select, textarea').forEach((element) => element.disabled = false);
+    })
+
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('[data-visibility-map]:checked, select[data-visibility-map]').forEach((element) => {
         initAndStore(element);
@@ -32,41 +40,34 @@ export default class VisibilityMap {
   }
 
   updateVisibility() {
-    const { action, getInputsForValues } = this;
+    const { action } = this;
+    const { inputsForValue, otherInputs } = this.getInputsForValues();
 
-    let toShow, toHide;
+    const showingInputsForValue = action === 'show';
 
-    if (action === 'show') {
-      [toShow, toHide] = getInputsForValues();
-    } else {
-      [toHide, toShow] = getInputsForValues();
-    }
-
-    toShow.forEach((element) => {
-      if (element.classList.contains('d-none')) {
-        element.classList.remove('d-none');
-        element.dispatchEvent(new Event('visibility:show'));
-      }
+    inputsForValue.forEach((element) => {
+      element.classList.toggle('d-none', !showingInputsForValue);
+      element.dispatchEvent(new Event(`visibility.${showingInputsForValue ? 'show' : 'hide'}`, { bubbles: true }));
     });
 
-    toHide.forEach((element) => {
-      if (!element.classList.contains('d-none')) {
-        element.classList.add('d-none');
-        element.dispatchEvent(new Event('visibility:hide'));
-      }
+    otherInputs.forEach((element) => {
+      element.classList.toggle('d-none', showingInputsForValue);
+      element.dispatchEvent(new Event(`visibility.${showingInputsForValue ? 'hide' : 'show'}`, { bubbles: true }));
     })
   }
 
   getInputsForValues = () => {
     const { selectedValues, scope, map, allFields } = this;
-    const inputsForValue = selectedValues.map((selectedValue) => [...scope.querySelectorAll(map[selectedValue])]).flat()
+    const inputsForValue = [... new Set(selectedValues.map((selectedValue) => [...scope.querySelectorAll(map[selectedValue])]).flat())]
     const otherInputs = allFields.filter(element => inputsForValue.indexOf(element) < 0)
 
-    return [inputsForValue, otherInputs];
+    return { inputsForValue, otherInputs };
   }
 
   get selectedValues() {
-    return Array.from(document.querySelectorAll(`input[name="${this.element.getAttribute('name')}"]`)).
+    const nameSelector = `[name="${this.element.getAttribute('name')}"]`;
+
+    return [... document.querySelectorAll(`input${nameSelector}, select${nameSelector} option`)].
       filter((input) => input.selected || input.checked).
       map((input) => input.value);
   }

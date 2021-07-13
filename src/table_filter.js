@@ -1,48 +1,70 @@
-export default (function($) {
-  var TableFilter;
-  TableFilter = (function() {
-    function TableFilter(element) {
-      var colspan, message;
-      this.element = element;
-      this.target = $(this.element.data('table-filter-target'));
-      this.allRows = $('tbody tr:not(.tr-no-record)', this.target);
-      colspan = this.target.data('no-record-span') != null ? this.target.data('no-record-span') : $('thead th', this.target).length;
-      message = this.target.data('no-record') != null ? this.target.data('no-record') : 'No records found';
-      this.noRecordRow = $("<tr class='tr-no-record'><td colspan=" + colspan + ">" + message + "</td></tr>");
+import trNoRecordTemplate from './templates/tr_no_record_template.html';
+
+export default class TableFilter {
+  constructor(element) {
+    this.element = element;
+    this.target = document.querySelector(element.dataset.tableFilterTarget);
+    this.noRecordMessage = element.dataset.noRecordMessage || 'No records found'
+  }
+
+  static #instances = new Map();
+
+  static start() {
+    const initAndStore = (element) => {
+      this.#instances.set(element, this.#instances.get(element) || new this(element));
+      return this.#instances.get(element);
     }
 
-    TableFilter.prototype.filter = function() {
-      var $toShow, keyword;
-      $('.tr-no-record', this.target).remove();
-      keyword = this.element.val().toLowerCase();
-      $toShow = keyword === '' ? this.allRows : this.allRows.filter(function() {
-        var trText;
-        trText = $(this).clone().find('.btn').remove().end().text().toLowerCase();
-        return trText.indexOf(keyword) > -1;
+    document.addEventListener('keyup', (event) => {
+      const { target } = event;
+
+      if (target && target.hasAttribute('data-table-filter-target')) {
+        initAndStore(target).filter();
+      }
+    });
+  }
+
+  filter = () => {
+    const { element, target, allRows, noRecordRow } = this;
+
+    const keyword = (element.value || '').trim().toLowerCase();
+
+    let rowsToShow = allRows;
+
+    if (keyword !== '') {
+      rowsToShow = rowsToShow.filter((row) => {
+        let cloneRow = row.cloneNode(true);
+        cloneRow.querySelectorAll('.btn').forEach((element) => element.remove());
+        const rowText = cloneRow.innerText.toLowerCase();
+
+        return rowText.indexOf(keyword) > -1;
       });
-      $toShow.show();
-      this.allRows.not($toShow).hide();
-      if ($toShow.length === 0) {
-        return $('tbody', this.target).append(this.noRecordRow);
-      }
-    };
+    }
 
-    return TableFilter;
+    allRows.forEach((row) => {
+      row.classList.toggle('d-none', rowsToShow.indexOf(row) < 0)
+    });
 
-  })();
-  $.fn.tableFilter = function() {
-    return this.each(function() {
-      var data;
-      data = $(this).data('table-filter');
-      if (data == null) {
-        $(this).data('table-filter', data = new TableFilter($(this)));
-      }
-      return data.filter();
-    });
-  };
-  return $(function() {
-    return $(document).on('keyup', '[data-table-filter-target]', function(e) {
-      return $(this).tableFilter();
-    });
-  });
-})(jQuery);
+    if (rowsToShow.length > 0) {
+      noRecordRow.remove();
+    } else {
+      target.querySelector('tbody').appendChild(noRecordRow);
+    }
+  }
+
+  get allRows() {
+    return [...this.target.querySelectorAll('tbody tr:not(.tr-no-record)')];
+  }
+
+  get noRecordRow() {
+    let row = this.target.querySelector('.tr-no-record');
+    if (!row) {
+      let template = document.createElement('template');
+      template.innerHTML = trNoRecordTemplate.trim();
+      row = template.content.firstChild;
+    }
+    row.querySelector('td').innerHTML = this.noRecordMessage
+
+    return row;
+  }
+}

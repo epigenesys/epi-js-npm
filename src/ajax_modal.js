@@ -1,23 +1,25 @@
 import { Modal } from 'bootstrap';
-import modalTemplate from './modal_template.html';
+import modalTemplate from './templates/modal_template.html';
 
-export default class RemoteModal {
-  constructor(element) {
-    this.element = element;
+export default class AjaxModal {
+  constructor(url) {
+    this.url = url;
   }
 
   static start() {
     document.addEventListener('click', (event) => {
-      if (event.target && event.target.getAttribute('data-toggle') === 'remote-modal') {
+      const { target } = event;
+
+      if (target && (target.getAttribute('data-toggle') === 'ajax-modal' || target.classList.contains('ajax-modal') )) {
         event.preventDefault();
 
-        const remoteModal = new this(event.target);
-        remoteModal.openRemoteModal();
+        const ajaxModal = new this(target.getAttribute('href'));
+        ajaxModal.openAjaxModal();
       }
     });
   }
 
-  async openRemoteModal() {
+  async openAjaxModal() {
     const content = await this.getContent();
     let modalWindow = this.getOrCreateModalWindow();
 
@@ -44,7 +46,7 @@ export default class RemoteModal {
   }
 
   async getContent() {
-    const response = await fetch(this.element.getAttribute('href'));
+    const response = await fetch(this.url);
     const content = await response.text()
     return content;
   }

@@ -1,32 +1,27 @@
-export default (function($) {
-  var $alerts = [];
-  var alertTimeout = [];
+import { Alert } from 'bootstrap';
+import flashMessageTemplate from './templates/flash_message_template.html';
 
-  $.flashAlert = function(message, type, timeout, dismissLink) {
-    if (timeout == null) {
-      timeout = 6000;
-    }
-    if (dismissLink == null) {
-      dismissLink = $.flashAlert.defaults.dismissLink;
-    }
+export default class FlashMessage {
 
-    var $alert = $('<div>').addClass("alert alert-dismissible fade in show " + type).append(message).append(dismissLink);
+  static template = flashMessageTemplate;
 
-    if(type == 'alert-success') {
-      $('.flash-messages .alert').alert('close');
-    }
+  static addMessage(message, options = {}) {
+    const { type = 'alert-primary', container = '.flash-messages', timeout = 6000 } = options;
 
-    $('.flash-messages').prepend($alert);
+    const containerElement = document.querySelector(container);
 
-    $alerts.push($alert);
-    alertTimeout.push(setTimeout(function() {
-      return $alerts.shift().alert('close');
-    }, timeout));
+    let template = document.createElement('template');
+    template.innerHTML = this.template.trim();
 
-    return true;
-  };
-  $.flashAlert.defaults = {
-    dismissLink: '<button type="button" class="close" data-dismiss="alert" aria-label="Dismiss"><span aria-hidden="true">&times;</span></button>',
-    affix: false
-  };
-})(jQuery);
+    const flashMessage = template.content.firstChild;
+
+    flashMessage.querySelector('.flash-message-content').innerHTML = message;
+    flashMessage.classList.add(type);
+
+    containerElement.appendChild(flashMessage);
+
+    setTimeout(() => {
+      Alert.getOrCreateInstance(flashMessage).close();
+    }, timeout);
+  }
+}

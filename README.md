@@ -1,36 +1,51 @@
 # EpiJS (NPM)
 
-Some jQuery based scripts, including:
+## **Please note: Version 1.0+ of epiJS only works with Bootstrap 5.0+, and does not support Internet Explorer. If you need IE supports please use 0.x and Bootstrap 4.x.**
 
-* A simple AJAX lightbox using Twitter Bootstrap modal
+Some scripts utilising Twitter Bootstrap components, including:
+
+* A simple Remote lightbox using Twitter Bootstrap modal
 * A simple Growl-like using Twitter Bootstrap alert
 * A simple table filter
 * A script to hide / show HTML elements based on user input
+* A script / CSS utility classes to reflow tables based on screen size
 
 ## Installation
 
 Run the following line in your projects root folder
-    yarn add epi-js
+
+    yarn add @epigenesys/epi-js@^1.0
 
 ## Usage
 
-### AJAX Modal
+### Ajax Modal
 Add to your `app/javascript/packs/application.js`
 
-    import { AjaxModal } from 'epigenesys-js'
+    import { AjaxModal } from '@epigenesys/epi-js';
+    AjaxModal.start();
+
+#### Via class
+Add `ajax-modal` class to your link
 
 #### Via data attribute
 Add `data-toggle=ajax-modal` to your link
-#### Via class
-Add `ajax-modal` class to your link
-#### Via JavaScript
 
-    $.ajaxModal(url);
+#### Via JavaScript
+    new AjaxModal(url).openAjaxModal();
+
+#### **Breaking changes compare to 0.x**
+In vesion 1.0+ of epiJS `AjaxModal` no longer fires custom events when modal is shown / hidden. Please update your event handlers to listen to Bootstrap events instead. E.g.
+
+    document.addEventListener('shown.bs.modal', (e) => {
+      if(e.target.id === '#modalWindow') {
+          ...
+      }
+    })
 
 ### Flash Message
 Add to your `app/javascript/packs/application.js`
 
-    import { FlashMessage } from 'epigenesys-js'
+    import { FlashMessage } from '@epigenesys/epi-js';
 
 #### For Rails flash fessage
 Wrap your flash message in a div with `.flash_messages` class, e.g.
@@ -43,51 +58,25 @@ Wrap your flash message in a div with `.flash_messages` class, e.g.
             = msg
 
 #### Via JavaScript
+    FlashMessage.addMessage(message, { type: alertClass });
 
-    $.flashAlert(message, alert_class);
-
-`alert_class` is `alert-notice` etc.
+`alertClass` is `alert-notice` etc.
 
 #### Customisation
-You can change the markup of the dismiss link by setting the following variable:
+You can pass in the following options to `addMessage` function:
+* `type`: CSS class for the message
+* `timeout`: Time in ms before the message dismisses itself
+* `container`: CSS selector for the container where the message will be add to
 
-    $.flashAlert.defaults.dismissLink
+You can change the markup of the template by setting the following variable. It needs to contain an element with the class `flash-message-content`:
 
-### Option Filter
-Add to your `app/javascript/packs/application.js`
-
-    import { OptionFilter } from 'epigenesys-js'
-
-#### Via data attributes
-Add the jQuery selector of the target input as `data-option-filter-target` to the source input, e.g.
-
-    data-option-filter-target="#input-box-1"
-
-To show an option in the target input when an option is selected in the source input, add the value of the source input as `data-option-filter-value`, e.g.
-
-    data-option-filter-value="1"
-
-When the option with value 1 is selected in source input, only options with `data-option-filter-value="1"` will be displayed.
-
-You can also add `data-option-filter-disable-empty` to the source input, so that when there is no options available for the current value, the target input will be disabled.
-
-### Responsive Table
-
-Add to your `app/javascript/packs/application.js`
-
-    import { ResponsiveTable } from 'epigenesys-js'
-
-And to your `app/javascript/packs/styles.css`
-
-    import '~epi-js/styles/responsive_table'
-
-Then add `.table-responsive-xs` or `.table-responsive-sm` to tables.
-You can override the label for each table cell by adding `data-label` to the `td` element.
+    FlashMessage.template
 
 ### Visibility Map
 Add to your `app/javascript/packs/application.js`
 
-    import { VisibilityMap } from 'epigenesys-js'
+    import { VisibilityMap } from '@epigenesys/epi-js';
+    VisibilityMap.start();
 
 #### Via data attributes
 Set `data-visibility-map` of a select box, radio button group or check boxes to a JSON string, e.g.
@@ -97,10 +86,10 @@ Or for SimpleForm, use:
 
     f.input :some_select, input_html: {data: {visibility_map: {foo: '#foo', bar: '#bar'}}}
 
-When the value of the input element is `foo`, the element `#foo` will be visible and `#bar` will be hidden, and vice versa. The value of the JSON key value pair can be any jQuery selectors.
+When the value of the input element is `foo`, the element `#foo` will be visible and `#bar` will be hidden, and vice versa. The value of the JSON key value pair can be any CSS selectors.
 
 #### Other options
-1. You can limit the scope of elements to hide / show by providing a JQuery selector as the `data-visibility-map-scope` attribute. Then only elements within the closest element of input matching the given selector will be affected, e.g.
+1. You can limit the scope of elements to hide / show by providing a CSS selector as the `data-visibility-map-scope` attribute. Then only elements within the closest element of input matching the given selector will be affected, e.g.
 
         .nested-fields
           = f.input :some_select, input_html: {data: {visibility_map_scope: '.nested-fields', visibility_map: {foo: '.foo', bar: '.bar'}}}
@@ -121,22 +110,22 @@ This allows you to filter out rows in a table based on an input field.
 
 Add to your `app/javascript/packs/application.js`
 
-    import { TableFilter } from 'epigenesys-js'
+    import { TableFilter } from '@epigenesys/epi-js';
+    TableFilter.start();
 
 #### Via data attributes
 Set `data-table-filter-target` on the input field you wish to filter by. This should be a selecter for the `table` tag you want to filter. This needs to have a `thead` and `tbody`.
 
 
-You can overwrite the default 'No record found' message by setting `data-no-record` on the table. The span of this will default to the number of `tr` elements in `thead`, but is customisable with `data-no-record-span` on the table.
+You can overwrite the default 'No record found' message by setting `data-no-record-message` on the table.
 
-### CSS Utilities
+### Table reflow
+This allows you to reflow a table into vertical format on smaller screens.
 
-#### Margins and Padding
+Add to your `app/javascript/packs/application.js`
 
-.margin-top-10 puts a 10px margin at the top etc.
+    import { TableReflow } from '@epigenesys/epi-js';
+    import '~@epigenesys/epi-js/dist/epi-js.css';
 
-Also can be for specific screen sizes: .margin-top-10-sm
-
-#### Others
-
-.mini, .nowrap, .display-none
+Then add `.table-xs-reflow` or `.table-sm-reflow` etc. to tables.
+You can override the label for each table cell by adding `data-label` to the `th` element in `thead`.

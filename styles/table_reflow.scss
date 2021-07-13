@@ -1,0 +1,61 @@
+@use "sass:math";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import '~bootstrap/scss/mixins';
+
+@mixin table-reflow() {
+  &, thead, tbody, tfoot, th, td, tr {
+    display: block;
+  }
+  td {
+    border: none;
+  }
+
+  thead {
+    @include visually-hidden();
+  }
+
+  tbody {
+    tr {
+      & + tr {
+        margin-top: math.div($spacer, 3);
+        padding-top: math.div($spacer, 2);
+        border-top: 1px solid $border-color;
+      }
+
+      td, th {
+        border-top: none;
+        text-align: left;
+        width: 100% !important;
+        padding: 0;
+        margin-bottom: math.div($spacer, 2);
+
+        &:before {
+          display: block;
+          white-space: nowrap;
+          font-weight: 800;
+          content: attr(data-label);
+        }
+      }
+    }
+  }
+
+  tfoot {
+    .page-item {
+      display: none;
+      &.prev, &.next, &.active {
+        display: list-item;
+      }
+    }
+  }
+}
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-down($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    .table#{$infix}-reflow {
+      @include table-reflow();
+    }
+  }
+}

@@ -1,5 +1,6 @@
 
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: 'production',
@@ -10,9 +11,7 @@ module.exports = {
     library: 'epiJS',
     libraryTarget: "umd"
   },
-  optimization: {
-    minimize: false
-  },
+  plugins: [new MiniCssExtractPlugin({ filename: 'epi-js.css' })],
   module: {
     rules: [
       {
@@ -28,6 +27,23 @@ module.exports = {
             minimize: true
           }
         }]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                outputStyle: "compressed",
+              },
+            },
+          }
+        ]
       }
     ],
   },
@@ -35,6 +51,6 @@ module.exports = {
     'bootstrap': 'bootstrap'
   },
   resolve: {
-    extensions: ['.js', '.html'],
+    extensions: ['.js', '.scss', '.html'],
   },
 };
