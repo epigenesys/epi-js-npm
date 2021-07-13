@@ -39,15 +39,6 @@
       }
     }
   }
-
-  tfoot {
-    .page-item {
-      display: none;
-      &.prev, &.next, &.active {
-        display: list-item;
-      }
-    }
-  }
 }
 
 @each $breakpoint in map-keys($grid-breakpoints) {
