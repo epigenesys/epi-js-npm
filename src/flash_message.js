@@ -1,4 +1,5 @@
 import { Alert } from 'bootstrap';
+import { templateToElement } from './utils';
 import flashMessageTemplate from './templates/flash_message_template.html';
 
 export default class FlashMessage {
@@ -10,10 +11,7 @@ export default class FlashMessage {
 
     const containerElement = document.querySelector(container);
 
-    let template = document.createElement('template');
-    template.innerHTML = this.template.trim();
-
-    const flashMessage = template.content.firstChild;
+    const flashMessage = templateToElement(this.template);
 
     flashMessage.querySelector('.flash-message-content').innerHTML = message;
     flashMessage.classList.add(type);

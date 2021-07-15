@@ -8,3 +8,9 @@ export const toggleVisibility = (element, showing) => {
     element.style.display = 'none';
   }
 }
+
+export const templateToElement = (templateText) => {
+  let template = document.createElement('template');
+  template.innerHTML = templateText.trim();
+  return template.content.firstChild;
+}

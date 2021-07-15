@@ -1,4 +1,4 @@
-import { toggleVisibility } from './utils';
+import { toggleVisibility, templateToElement } from './utils';
 import trNoRecordTemplate from './templates/tr_no_record_template.html';
 
 export default class TableFilter {
@@ -58,12 +58,7 @@ export default class TableFilter {
   }
 
   get noRecordRow() {
-    let row = this.target.querySelector('.tr-no-record');
-    if (!row) {
-      let template = document.createElement('template');
-      template.innerHTML = trNoRecordTemplate.trim();
-      row = template.content.firstChild;
-    }
+    const row = this.target.querySelector('.tr-no-record') || templateToElement(trNoRecordTemplate);
     row.querySelector('td').innerHTML = this.noRecordMessage
 
     return row;

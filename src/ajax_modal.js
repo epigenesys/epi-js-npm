@@ -1,4 +1,5 @@
 import { Modal } from 'bootstrap';
+import { templateToElement } from './utils';
 import modalTemplate from './templates/modal_template.html';
 
 export default class AjaxModal {
@@ -37,9 +38,7 @@ export default class AjaxModal {
 
   getOrCreateModalWindow() {;
     if (!document.getElementById('modalWindow')) {
-      let template = document.createElement('template');
-      template.innerHTML = modalTemplate.trim();
-      document.body.appendChild(template.content.firstChild);
+      document.body.appendChild(templateToElement(modalTemplate));
     }
 
     return document.getElementById('modalWindow');
