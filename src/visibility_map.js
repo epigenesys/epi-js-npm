@@ -1,3 +1,5 @@
+import { toggleVisibility } from './utils';
+
 export default class VisibilityMap {
   constructor(element) {
     this.element = element;
@@ -13,14 +15,14 @@ export default class VisibilityMap {
   static start() {
     const initAndStore = (element) => {
       this.#instances.set(element, this.#instances.get(element) || new this(element));
-      this.#instances.get(element).updateVisibility();
+      return this.#instances.get(element);
     }
 
     document.addEventListener('change', (event) => {
       const { target } = event;
 
       if (target && target.hasAttribute('data-visibility-map')) {
-        initAndStore(target);
+        initAndStore(target).updateVisibility();
       }
     });
 
@@ -33,8 +35,16 @@ export default class VisibilityMap {
     })
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-visibility-map]:checked, select[data-visibility-map]').forEach((element) => {
-        initAndStore(element);
+      let namesUpdated = new Set();
+
+      document.querySelectorAll('[data-visibility-map], select[data-visibility-map]').forEach((element) => {
+        const visibilityMap = initAndStore(element);
+        const elementName = element.getAttribute('name');
+
+        if (!(elementName && namesUpdated.has(elementName))) {
+          visibilityMap.updateVisibility();
+          namesUpdated.add(elementName);
+        }
       });
     });
   }
@@ -46,12 +56,12 @@ export default class VisibilityMap {
     const showingInputsForValue = action === 'show';
 
     inputsForValue.forEach((element) => {
-      element.classList.toggle('d-none', !showingInputsForValue);
+      toggleVisibility(element, showingInputsForValue);
       element.dispatchEvent(new Event(`visibility.${showingInputsForValue ? 'show' : 'hide'}`, { bubbles: true }));
     });
 
     otherInputs.forEach((element) => {
-      element.classList.toggle('d-none', showingInputsForValue);
+      toggleVisibility(element, !showingInputsForValue);
       element.dispatchEvent(new Event(`visibility.${showingInputsForValue ? 'hide' : 'show'}`, { bubbles: true }));
     })
   }
@@ -65,10 +75,14 @@ export default class VisibilityMap {
   }
 
   get selectedValues() {
-    const nameSelector = `[name="${this.element.getAttribute('name')}"]`;
+    if (this.element.hasAttribute('name')) {
+      const nameSelector = `[name="${this.element.getAttribute('name')}"]`;
 
-    return [... document.querySelectorAll(`input${nameSelector}, select${nameSelector} option`)].
-      filter((input) => input.selected || input.checked).
-      map((input) => input.value);
+      return [...document.querySelectorAll(`input${nameSelector}, select${nameSelector} option`)].
+        filter((input) => input.selected || input.checked).
+        map((input) => input.value);
+    } else {
+      return [this.element.value];
+    }
   }
 }

@@ -7,6 +7,7 @@ Some scripts utilising Twitter Bootstrap components, including:
 * A simple Remote lightbox using Twitter Bootstrap modal
 * A simple Growl-like using Twitter Bootstrap alert
 * A simple table filter
+* A script to automatically update content of the element by polling
 * A script to hide / show HTML elements based on user input
 * A script / CSS utility classes to reflow tables based on screen size
 
@@ -41,6 +42,15 @@ In vesion 1.0+ of epiJS `AjaxModal` no longer fires custom events when modal is 
           ...
       }
     })
+
+### Auto Upate
+Add to your `app/javascript/packs/application.js`
+
+    import { AutoUpdate } from '@epigenesys/epi-js';
+    AutoUpdate.start();
+
+Add `data-auto-update-url` to the element you would like to auto update. You can also specify `data-auto-update-interval` (default to 3000ms).
+The remote server needs to respond a JSON object with the key `newContent` which contains the content that will replace the content of the element, and optionally an `enablePolling` boolean. When `enablePolling` is set to false, auto update will stop.
 
 ### Flash Message
 Add to your `app/javascript/packs/application.js`

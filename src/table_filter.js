@@ -1,3 +1,4 @@
+import { toggleVisibility } from './utils';
 import trNoRecordTemplate from './templates/tr_no_record_template.html';
 
 export default class TableFilter {
@@ -42,7 +43,7 @@ export default class TableFilter {
     }
 
     allRows.forEach((row) => {
-      row.classList.toggle('d-none', rowsToShow.indexOf(row) < 0)
+      toggleVisibility(row, rowsToShow.indexOf(row) > -1);
     });
 
     if (rowsToShow.length > 0) {

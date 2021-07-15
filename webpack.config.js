@@ -11,6 +11,9 @@ module.exports = {
     library: 'epiJS',
     libraryTarget: "umd"
   },
+  optimization: {
+    minimize: false,
+  },
   plugins: [new MiniCssExtractPlugin({ filename: 'epi-js.css' })],
   module: {
     rules: [

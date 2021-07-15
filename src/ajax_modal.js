@@ -46,7 +46,7 @@ export default class AjaxModal {
   }
 
   async getContent() {
-    const response = await fetch(this.url);
+    const response = await fetch(this.url, { credentials: 'same-origin' });
     const content = await response.text()
     return content;
   }
