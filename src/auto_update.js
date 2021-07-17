@@ -26,6 +26,7 @@ export default class AutoUpdate {
     const { newContent, enablePolling = true } = await response.json();
 
     element.innerHTML = newContent;
+    element.dispatchEvent(new Event('autoupdate.updated', { bubbles: true }));
 
     if (enablePolling) {
       getNewContent();
