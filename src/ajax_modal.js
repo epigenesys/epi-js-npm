@@ -14,7 +14,7 @@ export default class AjaxModal {
       if (target && (target.getAttribute('data-toggle') === 'ajax-modal' || target.classList.contains('ajax-modal') )) {
         event.preventDefault();
 
-        const ajaxModal = new this(target.getAttribute('href'));
+        const ajaxModal = new this(target.getAttribute('data-url') || target.getAttribute('href'));
         ajaxModal.openAjaxModal();
       }
     });
