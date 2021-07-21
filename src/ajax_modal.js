@@ -9,12 +9,13 @@ export default class AjaxModal {
 
   static start() {
     document.addEventListener('click', (event) => {
-      const { target } = event;
+      const path = event.composedPath();
+      const element = path.find((element) => element.matches ? element.matches('.ajax-modal, [data-toggle="ajax-modal"]') : false);
 
-      if (target && (target.getAttribute('data-toggle') === 'ajax-modal' || target.classList.contains('ajax-modal') )) {
+      if (element) {
         event.preventDefault();
 
-        const ajaxModal = new this(target.getAttribute('data-url') || target.getAttribute('href'));
+        const ajaxModal = new this(element.getAttribute('data-url') || element.getAttribute('href'));
         ajaxModal.openAjaxModal();
       }
     });
