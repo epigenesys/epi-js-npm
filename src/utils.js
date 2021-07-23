@@ -9,8 +9,22 @@ export const toggleVisibility = (element, showing) => {
   }
 }
 
+export const parseTemplate = (template, map, fallback) => {
+  return template.replace(/\$\{(.*?)(?!\$\{)\}/g, (match) =>
+    match
+      .slice(2, -1)
+      .trim()
+      .split(".")
+      .reduce(
+        (searchObject, key) => searchObject[key] || fallback || match,
+        map
+      )
+  );
+};
+
+
 export const templateToElement = (templateText) => {
-  let template = document.createElement('template');
+  const template = document.createElement('template');
   template.innerHTML = templateText.trim();
   return template.content.firstChild;
 }

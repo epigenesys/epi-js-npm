@@ -5,6 +5,7 @@
 Some scripts utilising Twitter Bootstrap components, including:
 
 * A simple Remote lightbox using Twitter Bootstrap modal
+* A Bootstrap modal replacement for Rails' default confirmation popup
 * A simple Growl-like using Twitter Bootstrap alert
 * A simple table filter
 * A script to automatically update content of the element by polling
@@ -38,10 +39,27 @@ Add `data-toggle=ajax-modal` to your link
 In vesion 1.0+ of epiJS `AjaxModal` no longer fires custom events when modal is shown / hidden. Please update your event handlers to listen to Bootstrap events instead. E.g.
 
     document.addEventListener('shown.bs.modal', (e) => {
-      if(e.target.id === '#modalWindow') {
+      if(e.target.id === 'modalWindow') {
           ...
       }
     })
+
+### Confirm Modal
+Add to your `app/javascript/packs/application.js`
+
+    import { ConfirmModal } from '@epigenesys/epi-js';
+    Rails.confirm = function (message, element) {
+       return ConfirmModal.confirm(message, element);
+    }
+
+You can customise the class and text of commit / cancel button by changing the following in `ConfirmModal.options`
+* `commitButtonClass`
+* `commitButtonText`
+* `cancelButtonClass`
+* `cancelButtonText`
+
+E.g. `ConfirmModal.options.commitButtonClass = 'btn btn-success'`
+
 
 ### Auto Upate
 Add to your `app/javascript/packs/application.js`
@@ -51,6 +69,8 @@ Add to your `app/javascript/packs/application.js`
 
 Add `data-auto-update-url` to the element you would like to auto update. You can also specify `data-auto-update-interval` (default to 3000ms).
 The remote server needs to respond a JSON object with the key `newContent` which contains the content that will replace the content of the element, and optionally an `enablePolling` boolean. When `enablePolling` is set to false, auto update will stop.
+
+An `autoupdate.updated` event will be fired when the update is successful.
 
 ### Flash Message
 Add to your `app/javascript/packs/application.js`
@@ -136,6 +156,7 @@ Add to your `app/javascript/packs/application.js`
 
     import { TableReflow } from '@epigenesys/epi-js';
     import '~@epigenesys/epi-js/dist/epi-js.css';
+    TableReflow.start();
 
 Then add `.table-xs-reflow` or `.table-sm-reflow` etc. to tables.
 You can override the label for each table cell by adding `data-label` to the `th` element in `thead`.

@@ -37,7 +37,7 @@ export default class AjaxModal {
     Modal.getOrCreateInstance(modalWindow).show();
   }
 
-  getOrCreateModalWindow() {;
+  getOrCreateModalWindow() {
     if (!document.getElementById('modalWindow')) {
       document.body.appendChild(templateToElement(modalTemplate));
     }
