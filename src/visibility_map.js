@@ -1,5 +1,5 @@
 import { toggleVisibility } from './utils';
-import { default as getOrCreateInstance } from './element_map';
+import { default as ElementMap } from './element_map';
 
 export default class VisibilityMap {
   constructor(element) {
@@ -16,7 +16,7 @@ export default class VisibilityMap {
       const { target } = event;
 
       if (target && target.hasAttribute('data-visibility-map')) {
-        getOrCreateInstance(this, target).updateVisibility();
+        ElementMap.getOrCreateInstance(this, target).updateVisibility();
       }
     });
 
@@ -32,7 +32,7 @@ export default class VisibilityMap {
       let namesUpdated = new Set();
 
       document.querySelectorAll('[data-visibility-map], select[data-visibility-map]').forEach((element) => {
-        const visibilityMap = getOrCreateInstance(this, element);
+        const visibilityMap = ElementMap.getOrCreateInstance(this, element);
         const elementName = element.getAttribute('name');
 
         if (!(elementName && namesUpdated.has(elementName))) {

@@ -1,5 +1,5 @@
 import { Modal } from 'bootstrap';
-import { default as getOrCreateInstance } from './element_map';
+import { default as ElementMap } from './element_map';
 import { templateToElement, parseTemplate } from './utils';
 import modalTemplate from './templates/confirm_modal_template.html';
 
@@ -18,7 +18,7 @@ export default class ConfirmModal {
   }
 
   static confirm(message, element) {
-    getOrCreateInstance(this, element, { message: message }).confirm();
+    ElementMap.getOrCreateInstance(this, element, { message: message }).confirm();
   }
 
   confirm() {

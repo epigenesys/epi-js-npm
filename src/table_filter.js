@@ -1,5 +1,5 @@
 import { toggleVisibility, templateToElement } from './utils';
-import { default as getOrCreateInstance } from './element_map';
+import { default as ElementMap } from './element_map';
 import trNoRecordTemplate from './templates/tr_no_record_template.html';
 
 export default class TableFilter {
@@ -15,7 +15,7 @@ export default class TableFilter {
       const { target } = event;
 
       if (target && target.hasAttribute('data-table-filter-target')) {
-        getOrCreateInstance(this, target).filter();
+        ElementMap.getOrCreateInstance(this, target).filter();
       }
     });
   }

@@ -1,4 +1,4 @@
-class ElementMap {
+export default class ElementMap {
   static instances = new Map();
 
   static getOrCreateInstance = (klass, element, config = null) => {
@@ -15,5 +15,3 @@ class ElementMap {
     return instancesForKlass.get(element);
   }
 }
-
-export default ElementMap.getOrCreateInstance;
