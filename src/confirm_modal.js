@@ -1,11 +1,12 @@
 import { Modal } from 'bootstrap';
+import { default as getOrCreateInstance } from './element_map';
 import { templateToElement, parseTemplate } from './utils';
 import modalTemplate from './templates/confirm_modal_template.html';
 
 export default class ConfirmModal {
-  constructor(message, element) {
-    this.message = message;
+  constructor(element, { message }) {
     this.element = element;
+    this.message = message;
     this.confirmed = false;
   }
 
@@ -16,11 +17,8 @@ export default class ConfirmModal {
     cancelButtonText: '<i class="fa fa-fw fa-times"></i> No'
   }
 
-  static #instances = new Map();
-
   static confirm(message, element) {
-    this.#instances.set(element, this.#instances.get(element) || new this(message, element));
-    return this.#instances.get(element).confirm();
+    getOrCreateInstance(this, element, { message: message }).confirm();
   }
 
   confirm() {

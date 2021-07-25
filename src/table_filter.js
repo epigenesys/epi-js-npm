@@ -1,4 +1,5 @@
 import { toggleVisibility, templateToElement } from './utils';
+import { default as getOrCreateInstance } from './element_map';
 import trNoRecordTemplate from './templates/tr_no_record_template.html';
 
 export default class TableFilter {
@@ -8,19 +9,13 @@ export default class TableFilter {
     this.noRecordMessage = element.dataset.noRecordMessage || 'No records found'
   }
 
-  static #instances = new Map();
 
   static start() {
-    const initAndStore = (element) => {
-      this.#instances.set(element, this.#instances.get(element) || new this(element));
-      return this.#instances.get(element);
-    }
-
     document.addEventListener('keyup', (event) => {
       const { target } = event;
 
       if (target && target.hasAttribute('data-table-filter-target')) {
-        initAndStore(target).filter();
+        getOrCreateInstance(this, target).filter();
       }
     });
   }

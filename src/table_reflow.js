@@ -1,4 +1,5 @@
 import '../styles/table_reflow';
+import { default as getOrCreateInstance } from './element_map';
 
 export default class TableReflow {
   constructor(tableElement) {
@@ -19,24 +20,17 @@ export default class TableReflow {
     });
   }
 
-  static #instances = new Map();
-
   static start() {
-    const initAndStore = (element) => {
-      this.#instances.set(element, this.#instances.get(element) || new this(element));
-      return this.#instances.get(element);
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('table[class*="reflow"]').forEach((tableElement) => {
-        initAndStore(tableElement).setReflowLabels();
+        getOrCreateInstance(this, tableElement).setReflowLabels();
       });
     });
 
     document.addEventListener('autoupdate.updated', (event) => {
       const { target } = event;
       if (target.matches('table[class*="reflow"]')) {
-        initAndStore(target).setReflowLabels();
+        getOrCreateInstance(this, target).setReflowLabels();
       }
     });
   }

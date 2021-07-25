@@ -5,3 +5,4 @@ export { default as FlashMessage }  from './flash_message';
 export { default as TableFilter } from './table_filter';
 export { default as TableReflow }   from './table_reflow';
 export { default as VisibilityMap } from './visibility_map';
+export { default as getOrCreateInstance } from './element_map';

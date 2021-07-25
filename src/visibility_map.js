@@ -1,4 +1,5 @@
 import { toggleVisibility } from './utils';
+import { default as getOrCreateInstance } from './element_map';
 
 export default class VisibilityMap {
   constructor(element) {
@@ -10,19 +11,12 @@ export default class VisibilityMap {
     this.allFields = [...new Set(Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat())];
   }
 
-  static #instances = new Map();
-
   static start() {
-    const initAndStore = (element) => {
-      this.#instances.set(element, this.#instances.get(element) || new this(element));
-      return this.#instances.get(element);
-    }
-
     document.addEventListener('change', (event) => {
       const { target } = event;
 
       if (target && target.hasAttribute('data-visibility-map')) {
-        initAndStore(target).updateVisibility();
+        getOrCreateInstance(this, target).updateVisibility();
       }
     });
 
@@ -38,7 +32,7 @@ export default class VisibilityMap {
       let namesUpdated = new Set();
 
       document.querySelectorAll('[data-visibility-map], select[data-visibility-map]').forEach((element) => {
-        const visibilityMap = initAndStore(element);
+        const visibilityMap = getOrCreateInstance(this, element);
         const elementName = element.getAttribute('name');
 
         if (!(elementName && namesUpdated.has(elementName))) {
