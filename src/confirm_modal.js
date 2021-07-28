@@ -18,7 +18,7 @@ export default class ConfirmModal {
   }
 
   static confirm(message, element) {
-    ElementMap.getOrCreateInstance(this, element, { message: message }).confirm();
+    return ElementMap.getOrCreateInstance(this, element, { message: message }).confirm();
   }
 
   confirm() {
