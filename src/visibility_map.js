@@ -7,8 +7,6 @@ export default class VisibilityMap {
     this.scope = element.dataset.visibilityMapScope || document;
     this.action = element.dataset.visibilityMapAction || 'show';
     this.map = JSON.parse(element.dataset.visibilityMap);
-
-    this.allFields = [...new Set(Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat())];
   }
 
   static start() {
@@ -66,6 +64,10 @@ export default class VisibilityMap {
     const otherInputs = allFields.filter(element => inputsForValue.indexOf(element) < 0)
 
     return { inputsForValue, otherInputs };
+  }
+
+  get allFields() {
+    return [...new Set(Object.values(this.map).map((selector) => [...this.scope.querySelectorAll(selector)]).flat())];
   }
 
   get selectedValues() {
