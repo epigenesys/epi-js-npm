@@ -7,6 +7,8 @@ export const toggleVisibility = (element, showing) => {
   } else {
     element.style.display = 'none';
   }
+
+  element.toggleAttribute('data-visible', showing);
 }
 
 export const parseTemplate = (template, map, fallback) => {
