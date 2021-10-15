@@ -28,6 +28,7 @@
   },
   "resolutions": {
     "glob-parent": "^5.1.2",
-    "kind-of": "^6.0.3"
+    "kind-of": "^6.0.3",
+    "set-value": "^4.0.1"
   }
 }
