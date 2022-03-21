@@ -10,12 +10,13 @@ var _default = function ($) {
     return $.get(url, params, function (data) {
       var $modal, alreadyShown;
       $modal = $('#modalWindow').length > 0 ? $('#modalWindow') : $('<div id="modalWindow" class="modal fade" tabindex="-1" role="dialog"></div>');
-      alreadyShown = $modal.hasClass('in');
+      alreadyShown = $modal.hasClass('show') || $modal.hasClass('in');
       $modal.html(data);
       $('.modal-title', $modal).attr('id', 'modalWindowTitle');
       $modal.attr('aria-labelledby', 'modalWindowTitle');
       $('.modal-dialog', $modal).attr('role', 'document');
-      $('body').append($modal.modal());
+      $('body').append($modal);
+      $modal.modal('show');
       $(document).trigger('ajax-modal-show');
 
       if (alreadyShown) {
