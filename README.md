@@ -16,7 +16,7 @@ Run the following line in your projects root folder
 
 ### AJAX Modal
 
-A full guide can be found [here](/tree/master/docs/ajax_modal.md)
+A full guide can be found [here](/docs/ajax_modal.md)
 
 Add to your `app/javascript/packs/application.js`
 
