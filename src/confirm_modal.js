@@ -21,6 +21,16 @@ export default class ConfirmModal {
     return ElementMap.getOrCreateInstance(this, element, { message: message }).confirm();
   }
 
+  get options() {
+    const { commitButtonClass, commitButtonText, cancelButtonClass, cancelButtonText } = ConfirmModal.options;
+    return {
+      commitButtonClass: (this.element.dataset.commitClass || commitButtonClass),
+      commitButtonText:  (this.element.dataset.commit || commitButtonText),
+      cancelButtonClass: (this.element.dataset.cancelClass || cancelButtonClass),
+      cancelButtonText:  (this.element.dataset.cancel || cancelButtonText),
+    }
+  }
+
   confirm() {
     if (this.confirmed) {
       this.confirmed = false;
@@ -48,7 +58,7 @@ export default class ConfirmModal {
 
   get modal() {
     if (!document.getElementById('confirmModal')) {
-      document.body.append(templateToElement(parseTemplate(modalTemplate, { ...ConfirmModal.options, message: this.message })));
+      document.body.append(templateToElement(parseTemplate(modalTemplate, { ...this.options, message: this.message })));
     }
 
     return document.getElementById('confirmModal');
