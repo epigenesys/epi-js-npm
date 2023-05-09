@@ -1,6 +1,6 @@
 {
   "name": "@epigenesys/epi-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "EpiJS for Bootstrap 5",
   "main": "./dist/index.js",
   "scripts": {

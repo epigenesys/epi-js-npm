@@ -4,7 +4,13 @@ import { default as ElementMap } from './element_map';
 export default class VisibilityMap {
   constructor(element) {
     this.element = element;
-    this.scope = element.dataset.visibilityMapScope || document;
+
+    if (element.dataset.visibilityMapScope !== undefined) {
+      this.scope = this.element.closest(element.dataset.visibilityMapScope);
+    } else {
+      this.scope = document;
+    }
+
     this.action = element.dataset.visibilityMapAction || 'show';
     this.map = JSON.parse(element.dataset.visibilityMap);
   }
