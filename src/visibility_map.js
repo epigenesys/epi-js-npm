@@ -100,9 +100,10 @@ export default class VisibilityMap {
   get selectedValues() {
     if (this.element.hasAttribute('name')) {
       const nameSelector = `[name="${this.element.getAttribute('name')}"]`;
+      const textInputTypes = ['text', 'password', 'number', 'email', 'tel', 'url', 'search', 'date', 'datetime', 'datetime-local', 'time', 'month', 'week'];
 
       return [...document.querySelectorAll(`input${nameSelector}, select${nameSelector} option`)].
-        filter((input) => input.selected || input.checked).
+        filter((input) => input.selected || input.checked || textInputTypes.includes(input.type)).
         map((input) => input.value);
     } else {
       return [this.element.value];
