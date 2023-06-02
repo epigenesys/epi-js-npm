@@ -1,10 +1,18 @@
 import { Modal } from 'bootstrap';
-import { templateToElement } from './utils';
+import { templateToElement, parseTemplate } from './utils';
 import modalTemplate from './templates/modal_template.html';
+import errorMessageTemplate from './templates/modal_error_template.html';
 
 export default class AjaxModal {
   constructor(url) {
     this.url = url;
+  }
+
+  static options = {
+    errorModalTitle: 'Please try again',
+    errorModalText: 'Something went wrong when loading the content. Please refresh the page and try again.',
+    errorModalDismissButtonClass: 'btn btn-secondary',
+    errorModalDismissButtonText: '<i class="fa fa-fw fa-check"></i> Ok'
   }
 
   static start() {
@@ -47,7 +55,11 @@ export default class AjaxModal {
 
   async getContent() {
     const response = await fetch(this.url, { credentials: 'same-origin' });
-    const content = await response.text()
-    return content;
+    if (response.ok) {
+      const content = await response.text()
+      return content;
+    } else {
+      return parseTemplate(errorMessageTemplate, AjaxModal.options);
+    }
   }
 }
