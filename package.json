@@ -24,7 +24,8 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/plugin-transform-modules-commonjs": "^7.9.0",
-    "@babel/preset-env": "^7.9.0"
+    "@babel/preset-env": "^7.9.0",
+    "improved-yarn-audit": "^3.0.0"
   },
   "resolutions": {
     "glob-parent": "^5.1.2",
