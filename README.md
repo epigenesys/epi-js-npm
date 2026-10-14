@@ -102,6 +102,10 @@ Or for SimpleForm, use:
 
 When the value of the input element is `foo`, the element `#foo` will be visible and `#bar` will be hidden, and vice versa. The value of the JSON key value pair can be any jQuery selectors.
 
+If you wish to use this with a single checkbox you need to set the value to "1", e.g.
+```
+f.input :some_boolean, input_html: {data: {visibility_map: {"1": '#foo'}}
+```
 #### Other options
 1. You can limit the scope of elements to hide / show by providing a JQuery selector as the `data-visibility-map-scope` attribute. Then only elements within the closest element of input matching the given selector will be affected, e.g.
 
